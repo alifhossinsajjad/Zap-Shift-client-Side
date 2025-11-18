@@ -1,30 +1,43 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
 import Logo from "../../Components/Logo/Logo";
+import useAuth from "../../hooks/useAuth";
 
 const Navbar = () => {
+  const { user, logOut } = useAuth();
+
+  const handleLogOut = () => {
+    logOut()
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const links = (
     <>
       <li>
-        <NavLink to={''}/>
-        Services
+        <NavLink to={"/"}>Services</NavLink>
       </li>
       <li>
-        <NavLink to={''}/>
-        Services
+        <NavLink to={"/about"}>About us</NavLink>
       </li>
       <li>
-        <NavLink to={''}/>
-        Services
+        <NavLink to={"/send-parcel"}>Send Parcel</NavLink>
       </li>
       <li>
-        <NavLink to={''}/>
-        Services
+        <NavLink to={"/coverage"}>Coverage</NavLink>
       </li>
-      <li>
-        <NavLink to={''}/>
-        Services
+
+      {
+        user && <>
+        <li>
+        <NavLink to={"/dashboard/my-parcels"}>My Parcels</NavLink>
       </li>
+        </>
+      }
     </>
   );
 
@@ -52,7 +65,7 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex="-1"
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow "
             >
               {links}
             </ul>
@@ -61,31 +74,22 @@ const Navbar = () => {
             <Logo />
           </Link>
         </div>
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
-            <li>
-              <a>Item 1</a>
-            </li>
-            <li>
-              <details>
-                <summary>Parent</summary>
-                <ul className="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
-              </details>
-            </li>
-            <li>
-              <a>Item 3</a>
-            </li>
-          </ul>
+        <div className="navbar-center hidden lg:flex cursor-pointer gap-5">
+          <ul className="menu menu-horizontal px-1">{links}</ul>
         </div>
-        <div className="navbar-end">
-          <a className="btn">Button</a>
+        <div className="navbar-end ">
+          {user ? (
+            <a onClick={handleLogOut} className="btn">
+              Log Out
+            </a>
+          ) : (
+            <Link to={"/login"} className="btn">
+              Login
+            </Link>
+          )}
+          <Link to={"/rider"} className="btn bg-primary text-black mx-4">
+            Be a rider
+          </Link>
         </div>
       </div>
     </div>

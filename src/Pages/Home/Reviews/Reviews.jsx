@@ -1,5 +1,5 @@
 import React, { use } from "react";
-import { EffectCoverflow, Pagination } from "swiper/modules";
+import { Autoplay, EffectCoverflow, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
@@ -32,8 +32,12 @@ const Reviews = ({ reviewsPromise }) => {
           scale:0.75,
           slideShadows: true,
         }}
+        autoplay={{
+          delay:2000,
+          disableOnInteraction: false
+        }}
         pagination={true}
-        modules={[EffectCoverflow, Pagination]}
+        modules={[EffectCoverflow, Pagination,Autoplay]}
         className="mySwiper"
       >
         {reviews.map((review) => (
