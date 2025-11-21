@@ -13,6 +13,9 @@ import SendParcel from "../Pages/SendParcel/SendParcel";
 import DashBoardLayout from "../Layout/DashBoardLayout";
 import About from "../Pages/About/About";
 import MyParcels from "../Pages/Dashboard/MyParcels/MyParcels";
+import Payment from "../Pages/Dashboard/Payment/Payment";
+import PaymentSuccess from "../Pages/Dashboard/Payment/PaymentSuccess";
+import PaymentCancled from "../Pages/Dashboard/Payment/PaymentCancled";
 
 const router = createBrowserRouter([
   {
@@ -25,13 +28,12 @@ const router = createBrowserRouter([
       },
       {
         path: "/about",
-        Component: About
+        Component: About,
       },
       {
         path: "/coverage",
         element: <Coverage></Coverage>,
-        loader: () =>
-          fetch("/warehouses.json").then((res) => res.json()),
+        loader: () => fetch("/warehouses.json").then((res) => res.json()),
       },
       {
         path: "/rider",
@@ -48,8 +50,7 @@ const router = createBrowserRouter([
             <SendParcel />
           </PrivetRoute>
         ),
-        loader: () =>
-          fetch("/warehouses.json").then((res) => res.json()),
+        loader: () => fetch("/warehouses.json").then((res) => res.json()),
       },
     ],
   },
@@ -74,12 +75,24 @@ const router = createBrowserRouter([
         <DashBoardLayout />
       </PrivetRoute>
     ),
-    children : [
+    children: [
       {
-        path: 'my-parcels',
-        Component : MyParcels
+        path: "my-parcels",
+        Component: MyParcels,
+      },
+      {
+        path: "payment/:parcelId",
+        Component: Payment,
+      },
+      {
+        path: "payment-success",
+        Component: PaymentSuccess,
+      },
+      {
+        path: "payment-cancled",
+        Component: PaymentCancled,
       }
-    ]
+    ],
   },
 ]);
 

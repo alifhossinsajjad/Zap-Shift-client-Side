@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import useAuth from "../../hooks/useAuth";
@@ -20,6 +20,7 @@ const SendParcel = () => {
   const serviceCenters = useLoaderData();
   const regionsDuplicate = serviceCenters.map((c) => c.region);
 
+  const navigate = useNavigate();
   const regions = [...new Set(regionsDuplicate)];
 
   const senderRegion = useWatch({ control, name: "senderRegion" });
@@ -74,14 +75,24 @@ const SendParcel = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "I Agree with Pay",
+      confirmButtonText: "Countinue with payment",
     }).then((result) => {
       if (result.isConfirmed) {
         // save the pacerl info in the data base
 
-          axiosSecure.post("/parcels", data).then((res) => {
-            console.log("after saving parcel", res.data);
-          });
+        axiosSecure.post("/parcels", data).then((res) => {
+          console.log("after saving parcel", res.data);
+          if (res.data.insertedId) {
+            navigate("/dashboard/my-parcels");
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Your parcel has created , please proceed to payment",
+              showConfirmButton: false,
+              timer: 2500,
+            });
+          }
+        });
         reset();
         console.table(data);
         //   reset form
@@ -134,7 +145,9 @@ const SendParcel = () => {
               placeholder="Parcel Name"
               className="border border-gray-300 rounded px-3 py-2"
               //   name="parcelName"
-              {...register("parcelName")}
+              {...register("parcelName", {
+                required: "Parcel name is required",
+              })}
             />
             <input
               type="number"
@@ -142,7 +155,9 @@ const SendParcel = () => {
               placeholder="Parcel Weight (KG)"
               className="border border-gray-300 rounded px-3 py-2"
               //   name="parcelWeight"
-              {...register("parcelWeight")}
+              {...register("parcelWeight", {
+                required: "Parcel weight is required",
+              })}
             />
           </div>
         </div>
@@ -159,7 +174,9 @@ const SendParcel = () => {
               className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
               //   name="senderName"
               defaultValue={user?.email}
-              {...register("senderEmail")}
+              {...register("senderEmail", {
+                required: "Sender email is required",
+              })}
             />
             <div className="xl:lg:md:flex gap-4">
               <input
@@ -168,14 +185,18 @@ const SendParcel = () => {
                 defaultValue={user?.displayname}
                 className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
                 //   name="senderName"
-                {...register("senderName")}
+                {...register("senderName", {
+                  required: "Sender name is required",
+                })}
               />
             </div>
             <div className="flex  gap-4">
               {/* THEN Sender District */}
               <select
                 className="w-full border border-gray-300 rounded px-3 mb-3"
-                {...register("senderDistrict")}
+                {...register("senderDistrict", {
+                  required: "Sender district is required",
+                })}
               >
                 <option value="" disabled selected>
                   Select your district
@@ -191,12 +212,16 @@ const SendParcel = () => {
                 placeholder="Sender Contact No."
                 className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
                 //   name="senderContact"
-                {...register("senderContact")}
+                {...register("senderContact", {
+                  required: "Sender contact is required",
+                })}
               />
             </div>
             <select
               className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
-              {...register("senderRegion")}
+              {...register("senderRegion", {
+                required: "Sender region is required",
+              })}
             >
               <option value="" disabled selected>
                 Select your region
@@ -218,7 +243,9 @@ const SendParcel = () => {
               placeholder="Receiver Email"
               className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
               //   name="senderName"
-              {...register("receiverEmail")}
+              {...register("receiverEmail", {
+                required: "Receiver email is required",
+              })}
             />
 
             <div className="xl:lg:md:flex gap-4">
@@ -227,13 +254,17 @@ const SendParcel = () => {
                 placeholder="Receiver Name"
                 className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
                 // name="receiverName"
-                {...register("receiverName")}
+                {...register("receiverName", {
+                  required: "Receiver name is required",
+                })}
               />
             </div>
             <div className="flex gap-4">
               <select
                 className="w-full border border-gray-300 rounded px-3 mb-3"
-                {...register("receiverDistrict")}
+                {...register("receiverDistrict", {
+                  required: "Receiver district is required",
+                })}
               >
                 <option value="" disabled selected>
                   Select receiver district
@@ -249,12 +280,16 @@ const SendParcel = () => {
                 placeholder="Receiver Contact No."
                 className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
                 // name="receiverContact"
-                {...register("receiverContact")}
+                {...register("receiverContact", {
+                  required: "Receiver contact is required",
+                })}
               />
             </div>
             <select
               className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
-              {...register("receiverRegion")}
+              {...register("receiverRegion", {
+                required: "Receiver region is required",
+              })}
             >
               <option value="" disabled selected>
                 Select receiver region
@@ -274,13 +309,17 @@ const SendParcel = () => {
             placeholder="Pickup Instruction"
             className="border border-gray-300 rounded px-3 py-2 w-full h-20"
             // name="pickupInstruction"
-            {...register("pickupInstruction")}
+            {...register("pickupInstruction", {
+              required: "Pickup instruction is required",
+            })}
           />
           <textarea
             placeholder="Delivery Instruction"
             className="border border-gray-300 rounded px-3 py-2 w-full h-20"
             // name="deliveryInstruction"
-            {...register("deliveryInstruction")}
+            {...register("deliveryInstruction", {
+              required: "Delivery instruction is required",
+            })}
           />
         </div>
 

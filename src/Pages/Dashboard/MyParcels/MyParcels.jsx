@@ -5,13 +5,14 @@ import UseAxiosSecure from "../../../hooks/UseAxiosSecure";
 import { FaEdit, FaEye, FaStreetView } from "react-icons/fa";
 import { FaDeleteLeft, FaMagnifyingGlass, FaTrashCan } from "react-icons/fa6";
 import Swal from "sweetalert2";
+import { Link } from "react-router";
 
 const MyParcels = () => {
   const { user } = useAuth();
   console.log(user);
   const axiosSecure = UseAxiosSecure();
 
-  const { data: parcels = [],  refetch } = useQuery({
+  const { data: parcels = [], refetch } = useQuery({
     queryKey: ["myParcels", user?.email],
 
     queryFn: async () => {
@@ -46,6 +47,21 @@ const MyParcels = () => {
     });
   };
 
+  const haddlePayment = async (parcel) => {
+    // Payment processing logic goes here
+    const paymentInfo = {
+      cost: parcel.cost,
+      parcelId: parcel._id,
+      senderEmial: parcel.senderEmail,
+      parcelName: parcel.parcelName,
+    };
+
+    const res = await axiosSecure.post("/create-checkout-session", paymentInfo);
+
+    window.location.href = res.data.url;
+    console.log(res.data);
+  };
+
   return (
     <div>
       <h2>add of my all parcels : {parcels.length}</h2>
@@ -59,7 +75,9 @@ const MyParcels = () => {
               <th>Weight</th>
               <th>Cost</th>
               <th>Type</th>
-              <th>Payment Status</th>
+              <th>Payment</th>
+              <th>Delivery Status</th>
+              <th>Sender</th>
               <th>Acrions</th>
             </tr>
           </thead>
@@ -71,6 +89,23 @@ const MyParcels = () => {
                 <td>{parcel.parcelWeight}</td>
                 <td>{parcel.cost}</td>
                 <td>{parcel.parcelType}</td>
+                <td>
+                  {parcel.paymentStatus === "paid" ? (
+                    <span className="text-green-500">Paid</span>
+                  ) : (
+                    // <Link to={`/dashboard/payment/${parcel._id}`}>
+                    //   <button className="btn btn-primary btn-sm">Pay</button>
+                    // </Link>
+
+                    <button
+                      onClick={() => haddlePayment(parcel)}
+                      className="btn btn-primary btn-sm"
+                    >
+                      pay
+                    </button>
+                  )}
+                </td>
+                <td></td>
                 <td>{parcel.senderDistrict}</td>
                 <td className="space-x-2">
                   <button className="btn btn-square hover:btn-primary">
