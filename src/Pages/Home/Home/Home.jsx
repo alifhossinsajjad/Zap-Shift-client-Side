@@ -6,7 +6,7 @@ import Brands from "../Brands/Brands";
 import Reviews from "../Reviews/Reviews";
 
 
-const reviewsPromise = fetch('/public/reviews.json')
+const reviewsPromise = fetch('/reviews.json')
 .then(res=>res.json())
 
 

@@ -31,7 +31,7 @@ const router = createBrowserRouter([
         path: "/coverage",
         element: <Coverage></Coverage>,
         loader: () =>
-          fetch("/public/warehouses.json").then((res) => res.json()),
+          fetch("/warehouses.json").then((res) => res.json()),
       },
       {
         path: "/rider",
@@ -49,7 +49,7 @@ const router = createBrowserRouter([
           </PrivetRoute>
         ),
         loader: () =>
-          fetch("/public/warehouses.json").then((res) => res.json()),
+          fetch("/warehouses.json").then((res) => res.json()),
       },
     ],
   },

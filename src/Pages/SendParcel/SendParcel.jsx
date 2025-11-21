@@ -9,6 +9,7 @@ const SendParcel = () => {
   const {
     register,
     handleSubmit,
+    reset,
     control,
     // formState: { errors },
   } = useForm();
@@ -64,6 +65,8 @@ const SendParcel = () => {
     }
 
     console.log("cost", cost);
+
+    data.cost = cost;
     Swal.fire({
       title: "Please Confirm your parcel",
       text: `You will be charged ! ${cost} taka`,
@@ -76,9 +79,12 @@ const SendParcel = () => {
       if (result.isConfirmed) {
         // save the pacerl info in the data base
 
-        axiosSecure.post("/parcels", data).then((res) => {
-          console.log("after saving parcel", res.data);
-        });
+          axiosSecure.post("/parcels", data).then((res) => {
+            console.log("after saving parcel", res.data);
+          });
+        reset();
+        console.table(data);
+        //   reset form
 
         // Swal.fire({
         //   title: "Cancel !",
@@ -164,25 +170,21 @@ const SendParcel = () => {
                 //   name="senderName"
                 {...register("senderName")}
               />
-             
             </div>
             <div className="flex  gap-4">
+              {/* THEN Sender District */}
               <select
                 className="w-full border border-gray-300 rounded px-3 mb-3"
-                //   name="senderRegion"
                 {...register("senderDistrict")}
-                defaultValue="pick a district"
               >
-                <option value="" disabled>
+                <option value="" disabled selected>
                   Select your district
                 </option>
-                {districtByRegions(senderRegion).map((d, i) => (
+                {districtByRegions(senderRegion)?.map((d, i) => (
                   <option value={d} key={i}>
                     {d}
                   </option>
                 ))}
-
-                {/* Add more options as needed */}
               </select>
               <input
                 type="text"
@@ -193,12 +195,10 @@ const SendParcel = () => {
               />
             </div>
             <select
-              className="w-full border border-gray-300 rounded px-3 py-2"
-              //   name="senderRegion"
+              className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
               {...register("senderRegion")}
-              defaultValue="pick a reagion"
             >
-              <option value="" disabled>
+              <option value="" disabled selected>
                 Select your region
               </option>
               {regions.map((r, i) => (
@@ -206,8 +206,6 @@ const SendParcel = () => {
                   {r}
                 </option>
               ))}
-
-              {/* Add more options as needed */}
             </select>
           </div>
 
@@ -231,25 +229,20 @@ const SendParcel = () => {
                 // name="receiverName"
                 {...register("receiverName")}
               />
-             
             </div>
             <div className="flex gap-4">
               <select
                 className="w-full border border-gray-300 rounded px-3 mb-3"
-                //   name="receiverRegion"
                 {...register("receiverDistrict")}
-                defaultValue="pick a district"
               >
-                <option value="" disabled>
-                  Receiver district
+                <option value="" disabled selected>
+                  Select receiver district
                 </option>
-                {districtByRegions(receiverRegion).map((d, i) => (
+                {districtByRegions(receiverRegion)?.map((d, i) => (
                   <option value={d} key={i}>
                     {d}
                   </option>
                 ))}
-
-                {/* Add more options as needed */}
               </select>
               <input
                 type="text"
@@ -260,21 +253,17 @@ const SendParcel = () => {
               />
             </div>
             <select
-              className="w-full border border-gray-300 rounded px-3 py-2"
-              //   name="receiverRegion"
+              className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
               {...register("receiverRegion")}
-              defaultValue="pick a reagion"
             >
-              <option value="" disabled>
-                Select your region
+              <option value="" disabled selected>
+                Select receiver region
               </option>
               {regions.map((r, i) => (
                 <option value={r} key={i}>
                   {r}
                 </option>
               ))}
-
-              {/* Add more options as needed */}
             </select>
           </div>
         </div>
