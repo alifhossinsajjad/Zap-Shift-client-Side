@@ -52,7 +52,7 @@ const MyParcels = () => {
     const paymentInfo = {
       cost: parcel.cost,
       parcelId: parcel._id,
-      senderEmial: parcel.senderEmail,
+      senderEmail: parcel.senderEmail,
       parcelName: parcel.parcelName,
     };
 

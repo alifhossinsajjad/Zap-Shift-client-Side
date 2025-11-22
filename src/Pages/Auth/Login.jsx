@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import { Link, useNavigate } from "react-router";
 import { useLocation } from "react-router";
+import UseAxiosSecure from "../../hooks/UseAxiosSecure";
+import { Bounce, toast } from "react-toastify";
 
 const Login = () => {
   const {
@@ -16,11 +18,24 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  const axiosSecure = UseAxiosSecure();
+
   const handleLogin = (data) => {
     signInUser(data.email, data.password)
       .then((result) => {
         console.log(result.user);
-        navigate(location?.state || "/");
+        navigate("/");
+        toast.success(`Sign in successfully`, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                });
       })
       .catch((error) => console.log(error));
   };
@@ -29,10 +44,25 @@ const Login = () => {
     signInGoogle()
       .then((result) => {
         console.log(result.user);
-        navigate(location?.state || "/");
+
+        //create user in the data base
+        const userInfo = {
+          displayName: result.user.name,
+          email: result.user.displayName,
+          photoURL: result.user.photoURL,
+        };
+
+        axiosSecure.post("/users", userInfo).then((res) => {
+          if (res.data.insertedId) {
+            console.log("user data stored in database", res.data);
+            navigate(location?.state || "/");
+             toast.success('Sign in successfully')
+          }
+        });
       })
       .catch((error) => {
         console.log(error);
+        toast.error("Sign in failed");
       });
   };
 
@@ -80,7 +110,11 @@ const Login = () => {
 
         <p className="text-center mt-4">
           Don't have an account?
-          <Link state={location.state} to="/register" className="text-primary ml-2 underline">
+          <Link
+            state={location.state}
+            to="/register"
+            className="text-primary ml-2 underline"
+          >
             Register
           </Link>
         </p>

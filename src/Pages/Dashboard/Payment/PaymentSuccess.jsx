@@ -4,7 +4,7 @@ import UseAxiosSecure from "../../../hooks/UseAxiosSecure";
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
-  const [paymentInfo, setPaymentInfo] = useState({})
+  const [paymentInfo, setPaymentInfo] = useState({});
   const sessionId = searchParams.get("session_id");
   const axiosSecure = UseAxiosSecure();
   console.log(sessionId);
@@ -27,8 +27,8 @@ const PaymentSuccess = () => {
   return (
     <div>
       <h1>your payment was successful</h1>
-      <p>Your transection id : {paymentInfo ?.transactionId}</p>
-      <p>Your parcel Tracking id: {paymentInfo ?.trackingId}</p>
+      <p>Your transection id : {paymentInfo?.transactionId}</p>
+      <p>Your parcel Tracking id: {paymentInfo?.trackingId}</p>
     </div>
   );
 };

@@ -1,5 +1,7 @@
 import React from "react";
-import { FaParachuteBox } from "react-icons/fa";
+import { FaParachuteBox, FaRedRiver } from "react-icons/fa";
+import { FaMotorcycle } from "react-icons/fa6";
+import { MdOutlinePayment } from "react-icons/md";
 import { Link, NavLink, Outlet } from "react-router";
 
 const DashBoardLayout = () => {
@@ -48,7 +50,7 @@ const DashBoardLayout = () => {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <div className="flex min-h-full flex-col items-start bg-secondary/70 is-drawer-close:w-14 is-drawer-open:w-64">
+          <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
             {/* Sidebar content here */}
             <ul className="menu w-full grow">
               {/* List item */}
@@ -87,6 +89,32 @@ const DashBoardLayout = () => {
                   {" "}
                   <FaParachuteBox size={20} color="" />
                   <span className="is-drawer-close:hidden">My Parcels</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="MyParcels"
+                  to={"/dashboard/payments-history"}
+                >
+                  {" "}
+                  <MdOutlinePayment size={20} color="" />
+                  <span className="is-drawer-close:hidden">
+                    Pyments History
+                  </span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="Approve Riders"
+                  to={"/dashboard/approve-riders"}
+                >
+                  {" "}
+                  <FaMotorcycle size={20} color="" />
+                  <span className="is-drawer-close:hidden">
+                    Approve Riders
+                  </span>
                 </NavLink>
               </li>
 

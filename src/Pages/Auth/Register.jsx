@@ -4,6 +4,8 @@ import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import { FaGoogle } from "react-icons/fa";
 import axios from "axios";
+import UseAxiosSecure from "../../hooks/UseAxiosSecure";
+import { Bounce, toast } from "react-toastify";
 
 const Register = () => {
   const {
@@ -16,16 +18,17 @@ const Register = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
-  // console.log("in register", location);
+
+  const axiosSecure = UseAxiosSecure();
 
   const handleRegister = (data) => {
-    console.log("after the register", data.photo[0]);
+    // console.log("after the register", data.photo[0]);
 
     const profileImg = data.photo[0];
 
     registerUser(data.email, data.password)
-      .then((result) => {
-        console.log(result.user);
+      .then(() => {
+        // console.log(result.user);
         //store the image and get the photo url
 
         const formData = new FormData();
@@ -35,16 +38,28 @@ const Register = () => {
         }`;
 
         axios.post(image_API_URL, formData).then((res) => {
-          console.log("after image upload", res.data.data.url);
+          const photoURL = res.data.data.url;
+
+          //create user in the data base
+          const userInfo = {
+            displayName: data.name,
+            email: data.email,
+            photoURL: photoURL,
+          };
+          axiosSecure.post("/users", userInfo).then((res) => {
+            if (res.data.insertedId) {
+              console.log("user created in database");
+            }
+          });
 
           //update profile user here
           const userProfile = {
             displayName: data.name,
-            photoURL: res.data.data.url,
+            photoURL: photoURL,
           };
           updateUserProfile(userProfile)
             .then((result) => {
-              console.log("user profile updated", result.user);
+              console.log("user profile updated", result?.user);
               navigate(location.state || "/");
             })
             .catch((err) => {
@@ -61,12 +76,27 @@ const Register = () => {
     signInGoogle()
       .then((result) => {
         console.log(result.user);
+
+        //create user in the data base
+        const userInfo = {
+          displayName: result.user.name,
+          email: result.user.displayName,
+          photoURL: result.user.photoURL,
+        };
+
+        axiosSecure.post("/users", userInfo).then((res) => {
+          if (res.data.insertedId) {
+            console.log("user data stored in database", res.data);
+            navigate(location?.state || "/");
+            toast.success('Sign in successfully')
+          }
+        });
       })
       .catch((error) => {
         console.log(error);
+        toast.error(`Sign in failed: ${error.message}`);
       });
   };
-
   return (
     <div className="w-full">
       {" "}
