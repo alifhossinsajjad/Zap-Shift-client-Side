@@ -1,5 +1,5 @@
 import React from "react";
-import { FaParachuteBox, FaRedRiver } from "react-icons/fa";
+import { FaParachuteBox, FaRedRiver, FaUser, FaUsers } from "react-icons/fa";
 import { FaMotorcycle } from "react-icons/fa6";
 import { MdOutlinePayment } from "react-icons/md";
 import { Link, NavLink, Outlet } from "react-router";
@@ -100,7 +100,7 @@ const DashBoardLayout = () => {
                   {" "}
                   <MdOutlinePayment size={20} color="" />
                   <span className="is-drawer-close:hidden">
-                    Pyments History
+                    Payments History
                   </span>
                 </NavLink>
               </li>
@@ -108,13 +108,22 @@ const DashBoardLayout = () => {
                 <NavLink
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                   data-tip="Approve Riders"
-                  to={"/dashboard/approve-riders"}
+                  to={"/dashboard/approve-riders "}
                 >
                   {" "}
                   <FaMotorcycle size={20} color="" />
-                  <span className="is-drawer-close:hidden">
-                    Approve Riders
-                  </span>
+                  <span className="is-drawer-close:hidden">Approve Riders</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="Users Management"
+                  to={"/dashboard/users-management"}
+                >
+                  {" "}
+                  <FaUsers size={20} color="" />
+                  <span className="is-drawer-close:hidden">Users Management</span>
                 </NavLink>
               </li>
 

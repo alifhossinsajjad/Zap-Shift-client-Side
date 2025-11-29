@@ -1,11 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import UseAxiosSecure from "../../../hooks/UseAxiosSecure";
-import {
-  FaTrash,
-  FaUserPlus,
-  FaUserSlash,
-} from "react-icons/fa";
+import { FaEye, FaTrash, FaUserPlus, FaUserSlash } from "react-icons/fa";
 import Swal from "sweetalert2";
 
 const ApproveRiders = () => {
@@ -25,7 +21,8 @@ const ApproveRiders = () => {
 
   const updateRiderStatus = (rider, status) => {
     const updateInfo = { status: status, email: rider.email };
-    axiosSecure.patch(`/riders/${rider._id}`, updateInfo)
+    axiosSecure
+      .patch(`/riders/${rider._id}`, updateInfo)
       .then((res) => {
         if (res.data.modifiedCount) {
           refetch();
@@ -54,7 +51,7 @@ const ApproveRiders = () => {
 
   const handleRiderDelete = (id) => {
     console.log("Delete rider with ID:", id);
-    
+
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -65,22 +62,28 @@ const ApproveRiders = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosSecure.delete(`/riders/${id}`)
+        axiosSecure
+          .delete(`/riders/${id}`)
           .then((res) => {
             console.log("Delete response:", res.data);
-            
+
             if (res.data.deletedCount > 0) {
               refetch();
               Swal.fire("Deleted!", "Rider has been deleted.", "success");
             } else {
-              Swal.fire("Error!", "Rider not found or already deleted.", "error");
+              Swal.fire(
+                "Error!",
+                "Rider not found or already deleted.",
+                "error"
+              );
             }
           })
           .catch((error) => {
             console.error("Delete error:", error);
             Swal.fire(
-              "Error!", 
-              error.response?.data?.message || "Failed to delete rider. Please try again.", 
+              "Error!",
+              error.response?.data?.message ||
+                "Failed to delete rider. Please try again.",
               "error"
             );
           });
@@ -154,12 +157,19 @@ const ApproveRiders = () => {
                         <FaUserSlash />
                       </button>
                     )}
-                    <button 
-                      onClick={() => handleRiderDelete(rider._id)} 
+                    <button
+                      onClick={() => handleRiderDelete(rider._id)}
                       className="btn btn-sm btn-error text-white"
                       title="Delete Rider"
                     >
                       <FaTrash />
+                    </button>
+                    <button
+                      // onClick={() => handleRiderDelete(rider._id)}
+                      className="btn btn-sm btn-error text-white"
+                      title="Delete Rider"
+                    >
+                      <FaEye/>
                     </button>
                   </td>
                 </tr>
