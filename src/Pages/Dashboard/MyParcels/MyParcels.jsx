@@ -68,27 +68,26 @@ const MyParcels = () => {
       <div className="overflow-x-auto">
         <table className="table table-zebra">
           {/* head */}
-          <thead>
+          <thead className="text-center">
             <tr>
               <th>SN</th>
               <th>Name</th>
               <th>Weight</th>
               <th>Cost</th>
-              <th>Type</th>
-              <th>Payment</th>
+              <th>Payment Status</th>
+              <th>Tracking Id</th>
               <th>Delivery Status</th>
-              <th>Sender</th>
-              <th>Acrions</th>
+              <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-center">
             {parcels.map((parcel, index) => (
               <tr key={parcel._id}>
                 <th>{index + 1}</th>
                 <td>{parcel.parcelName}</td>
                 <td>{parcel.parcelWeight}</td>
                 <td>{parcel.cost}</td>
-                <td>{parcel.parcelType}</td>
+                {/* <td>{parcel.parcelType}</td> */}
                 <td>
                   {parcel.paymentStatus === "paid" ? (
                     <span className="text-green-500">Paid</span>
@@ -105,8 +104,8 @@ const MyParcels = () => {
                     </button>
                   )}
                 </td>
-                <td></td>
-                <td>{parcel.senderDistrict}</td>
+                  <td>{parcel.trackingId}</td>
+                  <td>{parcel.deliveryStatus}</td>
                 <td className="space-x-2">
                   <button className="btn btn-square hover:btn-primary">
                     <FaMagnifyingGlass />

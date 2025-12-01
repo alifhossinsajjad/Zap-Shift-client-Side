@@ -1,22 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import UseAxiosSecure from "../../../hooks/UseAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
-import { FaUserShield } from "react-icons/fa";
+import { FaSearch, FaUserShield } from "react-icons/fa";
 import { FiShieldOff } from "react-icons/fi";
 import Swal from "sweetalert2";
 
 const UsersManagement = () => {
   const axiosSecure = UseAxiosSecure();
-
+  const [search, setSearch] = useState("");
   const { refetch, data: users = [] } = useQuery({
-    queryKey: ["users"],
+    queryKey: ["users", search],
     queryFn: async () => {
-      const res = await axiosSecure.get("/users");
+      const res = await axiosSecure.get(`/users?search=${search}`);
       return res.data;
     },
   });
 
-  const handleMakeUser = (user) => {
+  const handleMakeAdmin = (user) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You want to make this user an Admin!",
@@ -29,7 +29,7 @@ const UsersManagement = () => {
       if (result.isConfirmed) {
         const roleInfo = { role: "admin" };
 
-        axiosSecure.patch(`/users/${user._id}`, roleInfo).then((res) => {
+        axiosSecure.patch(`/users/${user._id}/role`, roleInfo).then((res) => {
           if (res.data.modifiedCount) {
             refetch();
 
@@ -47,7 +47,7 @@ const UsersManagement = () => {
 
   const handleRemoveAdmin = (user) => {
     const roleInfo = { role: "user" };
-    axiosSecure.patch(`/users/${user._id}`, roleInfo).then((res) => {
+    axiosSecure.patch(`/users/${user._id}/role`, roleInfo).then((res) => {
       if (res.data.modifiedCount) {
         console.log(res.data);
         refetch();
@@ -64,8 +64,21 @@ const UsersManagement = () => {
 
   return (
     <div>
-      <h2 className="text-2xl">Manage Users : {users.length}</h2>
+      <h2 className="text-2xl text-center my-10">
+        Manage Users : {users.length}
+      </h2>
 
+      <div className="flex justify-center items-center my-10">
+        <label className="input">
+          <FaSearch />
+          <input
+            onChange={(e) => setSearch(e.target.value)}
+            type="search"
+            className="grow"
+            placeholder="Search users"
+          />
+        </label>
+      </div>
       <div className="overflow-x-auto">
         <table className="table">
           {/* head */}
@@ -113,7 +126,7 @@ const UsersManagement = () => {
                     </button>
                   ) : (
                     <button
-                      onClick={() => handleMakeUser(user)}
+                      onClick={() => handleMakeAdmin(user)}
                       className="btn bg-green-400"
                     >
                       <FaUserShield />

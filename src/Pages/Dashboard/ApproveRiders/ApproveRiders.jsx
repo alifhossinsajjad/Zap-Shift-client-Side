@@ -15,6 +15,7 @@ const ApproveRiders = () => {
     queryKey: ["riders"],
     queryFn: async () => {
       const res = await axiosSecure.get("/riders");
+      console.log(res.data);
       return res.data;
     },
   });
@@ -57,9 +58,9 @@ const ApproveRiders = () => {
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: "btn-primary",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, approved it!",
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure
@@ -105,24 +106,24 @@ const ApproveRiders = () => {
         <div className="overflow-x-auto">
           <table className="table w-full">
             <thead>
-              <tr>
+              <tr className="text-center">
                 <th>SN</th>
                 <th>Rider Name</th>
-                <th>Rider Email</th>
-                <th>Rider Age</th>
+                <th>Email</th>
+                <th>Work Status</th>
                 <th>Rider Nid</th>
-                <th>Status</th>
+                <th>Application Status</th>
                 <th>Bike Brand</th>
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="text-center">
               {riders.map((rider, index) => (
                 <tr key={rider._id}>
                   <td>{index + 1}</td>
                   <td>{rider.name}</td>
                   <td>{rider.email}</td>
-                  <td>{rider.age}</td>
+                  <td>{rider.workStatus}</td>
                   <td>{rider.nid}</td>
                   <td>
                     <span
@@ -169,7 +170,7 @@ const ApproveRiders = () => {
                       className="btn btn-sm btn-error text-white"
                       title="Delete Rider"
                     >
-                      <FaEye/>
+                      <FaEye />
                     </button>
                   </td>
                 </tr>
