@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import UseAxiosSecure from "../../../hooks/UseAxiosSecure";
-import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+import { useQuery } from "@tanstack/react-query";
 
 const AssignRiders = () => {
   const [selectedParcel, setSelectedParcel] = useState(null);
@@ -33,7 +33,6 @@ const AssignRiders = () => {
 
   const oppenAssignRiderModel = (parcel) => {
     setSelectedParcel(parcel);
-    console.log(parcel.senderDistrict);
     riderModalRef.current.showModal();
   };
 
@@ -43,6 +42,7 @@ const AssignRiders = () => {
       riderEmail: rider.email,
       riderName: rider.name,
       parcelId: selectedParcel._id,
+      trackingId: selectedParcel.trackingId
     };
 
     axiosSecure
@@ -89,7 +89,7 @@ const AssignRiders = () => {
                 <td>{parcel.senderDistrict}</td>
                 <td>
                   <button
-                    onClick={() => oppenAssignRiderModel(parcel)}
+                    onClick={()=>oppenAssignRiderModel(parcel)}
                     className="btn btn-primary text-black"
                   >
                     Find Rider
@@ -127,7 +127,7 @@ const AssignRiders = () => {
                     <td>{rider.email}</td>
                     <td>
                       <button
-                        onClick={() => handdleAssignRider(rider)}
+                        onClick={()=>handdleAssignRider(rider)}
                         className="btn btn-primary text-black"
                       >
                         Assign

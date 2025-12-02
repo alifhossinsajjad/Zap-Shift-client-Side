@@ -51,14 +51,12 @@ const ApproveRiders = () => {
   };
 
   const handleRiderDelete = (id) => {
-    console.log("Delete rider with ID:", id);
-
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "btn-primary",
+      confirmButtonColor: "blue",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, approved it!",
     }).then((result) => {
