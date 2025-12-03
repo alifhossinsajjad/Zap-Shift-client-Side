@@ -1,25 +1,26 @@
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useRef, useState } from "react";
-import UseAxiosSecure from "../../../hooks/UseAxiosSecure";
+
 import Swal from "sweetalert2";
-import { useQuery } from "@tanstack/react-query";
+import UseAxiosSecure from "../../../hooks/UseAxiosSecure";
 
 const AssignRiders = () => {
   const [selectedParcel, setSelectedParcel] = useState(null);
   const axiosSecure = UseAxiosSecure();
   const riderModalRef = useRef();
+  const queryClient = useQueryClient();
 
-  const { data: parcels = [], refetch: parcelRefetch } = useQuery({
+  const { data: parcels = [], refetch: parcelsRefetch } = useQuery({
     queryKey: ["parcels", "pending-pickup"],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        "parcels?deliveryStatus=pending-pickup"
+        "/parcels?deliveryStatus=pending-pickup"
       );
-
       return res.data;
     },
   });
 
-  //todo : invalidate query after assigned a rider
+  // todo: invalidate query after assigning a rider
   const { data: riders = [] } = useQuery({
     queryKey: ["riders", selectedParcel?.senderDistrict, "available"],
     enabled: !!selectedParcel,
@@ -31,32 +32,35 @@ const AssignRiders = () => {
     },
   });
 
-  const oppenAssignRiderModel = (parcel) => {
+  const openAssignRiderModal = (parcel) => {
     setSelectedParcel(parcel);
+
     riderModalRef.current.showModal();
   };
 
-  const handdleAssignRider = (rider) => {
+  const handleAssignRider = (rider) => {
     const riderAssignInfo = {
       riderId: rider._id,
       riderEmail: rider.email,
       riderName: rider.name,
       parcelId: selectedParcel._id,
-      trackingId: selectedParcel.trackingId
+      trackingId: selectedParcel.trackingId,
     };
-
     axiosSecure
       .patch(`/parcels/${selectedParcel._id}`, riderAssignInfo)
       .then((res) => {
         if (res.data.modifiedCount) {
           riderModalRef.current.close();
-          parcelRefetch();
+          parcelsRefetch();
+          queryClient.invalidateQueries({
+            queryKey: ["parcels", "pending-pickup"],
+          });
           Swal.fire({
             position: "top-end",
             icon: "success",
-            title: `Rider has assigned `,
+            title: `Rider has been assigned.`,
             showConfirmButton: false,
-            timer: 2000,
+            timer: 1500,
           });
         }
       });
@@ -64,19 +68,18 @@ const AssignRiders = () => {
 
   return (
     <div>
-      <h2>Parcels:{parcels.length}</h2>
-
+      <h2 className="text-5xl">Assign Riders: {parcels.length}</h2>
       <div className="overflow-x-auto">
         <table className="table table-zebra">
           {/* head */}
           <thead>
             <tr>
-              <th>SN</th>
+              <th></th>
               <th>Name</th>
               <th>Cost</th>
               <th>Created At</th>
-              <th>Pick-Up Location</th>
-              <th>Actions</th>
+              <th>Pickup District</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -89,10 +92,10 @@ const AssignRiders = () => {
                 <td>{parcel.senderDistrict}</td>
                 <td>
                   <button
-                    onClick={()=>oppenAssignRiderModel(parcel)}
+                    onClick={() => openAssignRiderModal(parcel)}
                     className="btn btn-primary text-black"
                   >
-                    Find Rider
+                    Find Riders
                   </button>
                 </td>
               </tr>
@@ -100,34 +103,33 @@ const AssignRiders = () => {
           </tbody>
         </table>
       </div>
-
       <dialog
         ref={riderModalRef}
         className="modal modal-bottom sm:modal-middle"
       >
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Riders : {riders.length}!</h3>
+          <h3 className="font-bold text-lg">Riders: {riders.length}!</h3>
 
           <div className="overflow-x-auto">
             <table className="table table-zebra">
               {/* head */}
               <thead>
                 <tr>
-                  <th>No</th>
+                  <th></th>
                   <th>Name</th>
-                  <th>Email</th>
-                  {/* <th>Favorite Color</th> */}
+                  <th>Job</th>
+                  <th>Favorite Color</th>
                 </tr>
               </thead>
               <tbody>
-                {riders.map((rider, index) => (
+                {riders.map((rider, i) => (
                   <tr key={rider._id}>
-                    <th>{index + 1}</th>
+                    <th>{i + 1}</th>
                     <td>{rider.name}</td>
                     <td>{rider.email}</td>
                     <td>
                       <button
-                        onClick={()=>handdleAssignRider(rider)}
+                        onClick={() => handleAssignRider(rider)}
                         className="btn btn-primary text-black"
                       >
                         Assign

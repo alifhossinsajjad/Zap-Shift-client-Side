@@ -1,7 +1,7 @@
 import React from "react";
 import { FaParachuteBox, FaRedRiver, FaTasks, FaUser, FaUsers } from "react-icons/fa";
 import { FaMotorcycle } from "react-icons/fa6";
-import { MdAssignmentTurnedIn, MdOutlinePayment } from "react-icons/md";
+import { MdAssignmentTurnedIn, MdOutlinePayment, MdOutlineTaskAlt } from "react-icons/md";
 import { Link, NavLink, Outlet } from "react-router";
 import useRole from "../hooks/useRole";
 
@@ -121,6 +121,19 @@ const DashBoardLayout = () => {
                       <FaTasks size={20} color="" />
                       <span className="is-drawer-close:hidden">
                         Assigned Deliveries
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="Completed Deliveries"
+                      to={"/dashboard/completed-deliveries"}
+                    >
+                      {" "}
+                      <MdOutlineTaskAlt size={20} color=""/>
+                      <span className="is-drawer-close:hidden">
+                        Completed Deliveries
                       </span>
                     </NavLink>
                   </li>
