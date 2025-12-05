@@ -1,9 +1,20 @@
 import React from "react";
-import { FaParachuteBox, FaRedRiver, FaTasks, FaUser, FaUsers } from "react-icons/fa";
+import {
+  FaParachuteBox,
+  FaRedRiver,
+  FaTasks,
+  FaUser,
+  FaUsers,
+} from "react-icons/fa";
 import { FaMotorcycle } from "react-icons/fa6";
-import { MdAssignmentTurnedIn, MdOutlinePayment, MdOutlineTaskAlt } from "react-icons/md";
+import {
+  MdAssignmentTurnedIn,
+  MdOutlinePayment,
+  MdOutlineTaskAlt,
+} from "react-icons/md";
 import { Link, NavLink, Outlet } from "react-router";
 import useRole from "../hooks/useRole";
+import Logo from "../assets/logo.png";
 
 const DashBoardLayout = () => {
   const { role } = useRole();
@@ -57,8 +68,11 @@ const DashBoardLayout = () => {
             <ul className="menu w-full grow">
               {/* List item */}
               <li>
+             <Link to={'/'}> <img src={Logo} alt="" className="w-12" /></Link>
+              </li>
+              <li>
                 <Link
-                  to={"/"}
+                  to={"/dashboard"}
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                   data-tip="Homepage"
                 >
@@ -131,7 +145,7 @@ const DashBoardLayout = () => {
                       to={"/dashboard/completed-deliveries"}
                     >
                       {" "}
-                      <MdOutlineTaskAlt size={20} color=""/>
+                      <MdOutlineTaskAlt size={20} color="" />
                       <span className="is-drawer-close:hidden">
                         Completed Deliveries
                       </span>

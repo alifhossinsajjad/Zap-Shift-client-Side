@@ -54,12 +54,13 @@ const MyParcels = () => {
       parcelId: parcel._id,
       senderEmail: parcel.senderEmail,
       parcelName: parcel.parcelName,
+      trackingId: parcel.trackingId,
     };
 
     const res = await axiosSecure.post("/create-checkout-session", paymentInfo);
 
     window.location.href = res.data.url;
-    console.log(res.data);
+    // console.log(res.data);
   };
 
   return (
@@ -90,7 +91,7 @@ const MyParcels = () => {
                 {/* <td>{parcel.parcelType}</td> */}
                 <td>
                   {parcel.paymentStatus === "paid" ? (
-                    <span className="text-green-500">Paid</span>
+                    <span className="text-green-800">Paid</span>
                   ) : (
                     // <Link to={`/dashboard/payment/${parcel._id}`}>
                     //   <button className="btn btn-primary btn-sm">Pay</button>
@@ -104,8 +105,12 @@ const MyParcels = () => {
                     </button>
                   )}
                 </td>
-                  <td>{parcel.trackingId}</td>
-                  <td>{parcel.deliveryStatus}</td>
+                <td>
+                  <Link to={`/parcel-track/${parcel.trackingId}`}>
+                    {parcel.trackingId}
+                  </Link>
+                </td>
+                <td>{parcel.deliveryStatus}</td>
                 <td className="space-x-2">
                   <button className="btn btn-square hover:btn-primary">
                     <FaMagnifyingGlass />

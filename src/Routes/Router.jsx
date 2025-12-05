@@ -13,7 +13,7 @@ import SendParcel from "../Pages/SendParcel/SendParcel";
 import DashBoardLayout from "../Layout/DashBoardLayout";
 import About from "../Pages/About/About";
 import MyParcels from "../Pages/Dashboard/MyParcels/MyParcels";
-import Payment from "../Pages/Dashboard/Payment/Payment";
+// import Payment from "../Pages/Dashboard/Payment/Payment";
 import PaymentSuccess from "../Pages/Dashboard/Payment/PaymentSuccess";
 import PaymentCancled from "../Pages/Dashboard/Payment/PaymentCancled";
 import PaymentsHistory from "../Pages/Dashboard/PaymentsHistory/PaymentsHistory";
@@ -26,6 +26,8 @@ import AssignRiders from "../Pages/Dashboard/AssignRiders/AssignRiders";
 import RiderRoute from "./RiderRoute";
 import AssignedDeliveries from "../Pages/Dashboard/AssignedDeliveries/AssignedDeliveries";
 import CompletedDeliveries from "../Pages/Dashboard/CompletedDeliveries/CompletedDeliveries";
+import ParcelTrack from "../Pages/ParcelTrack/ParcelTrack";
+import DashboardHome from "../Pages/Dashboard/DashboardHome/DashboardHome";
 
 const router = createBrowserRouter([
   {
@@ -63,6 +65,10 @@ const router = createBrowserRouter([
         ),
         loader: () => fetch("/warehouses.json").then((res) => res.json()),
       },
+      {
+        path: "/parcel-track/:trackingId",
+        Component: ParcelTrack,
+      },
     ],
   },
   {
@@ -88,13 +94,17 @@ const router = createBrowserRouter([
     ),
     children: [
       {
+        index: true,
+        Component: DashboardHome,
+      },
+      {
         path: "my-parcels",
         Component: MyParcels,
       },
-      {
-        path: "payment/:parcelId",
-        Component: Payment,
-      },
+      // {
+      //   path: "payment/:parcelId",
+      //   Component: Payment,
+      // },
       {
         path: "payment-success",
         Component: PaymentSuccess,
@@ -121,7 +131,7 @@ const router = createBrowserRouter([
         path: "completed-deliveries",
         element: (
           <RiderRoute>
-            <CompletedDeliveries/>
+            <CompletedDeliveries />
           </RiderRoute>
         ),
       },
